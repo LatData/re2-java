@@ -10,10 +10,7 @@ all: build
 build: $(OBJ)/libre2-java.so class
 
 .re2.download.stamp:
-#	hg clone https://re2.googlecode.com/hg re2
-#	wget http://re2.googlecode.com/files/re2-20140304.tgz -O re2.tgz
-        git clone https://github.com/google/re2.git
-#	tar xvf re2.tgz
+	git clone https://github.com/google/re2.git
 	touch .re2.download.stamp
 
 .re2.compile.stamp: .re2.download.stamp
@@ -48,3 +45,6 @@ clean:
 	rm -fr target
 	rm -fr src/main/resources/NATIVE
 	rm -f .*.stamp
+
+install:
+        mvn install:install-file -Dfile=target/libre2-java-1.2.5.jar
