@@ -14,27 +14,27 @@ build: $(OBJ)/libre2-java.so class
 	touch .re2.download.stamp
 
 .re2.compile.stamp: .re2.download.stamp
-        cd re2 && make
-        touch .re2.compile.stamp
+	cd re2 && make
+	touch .re2.compile.stamp
 
 $(OBJ)/RE2.o: .re2.download.stamp $(addprefix src/main/java/com/logentries/re2/, RE2.cpp RE2.h)
-        mkdir -p $(OBJ)
-        $(CXX) -std=gnu++11 -O3 -g -fPIC -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -Ire2 -c src/main/java/com/logentries/re2/RE2.cpp -o $(OBJ)/RE2.o
+	mkdir -p $(OBJ)
+	$(CXX) -std=gnu++11 -O3 -g -fPIC -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -Ire2 -c src/main/java/com/logentries/re2/RE2.cpp -o $(OBJ)/RE2.o
 
 $(OBJ)/libre2-java.so: $(OBJ)/RE2.o .re2.compile.stamp
-        $(CXX) -shared -Wl,-soname,libre2-java.so -o $(OBJ)/libre2-java.so $(OBJ)/RE2.o -Lre2/obj/so -lre2 -lpthread
-        strip $(OBJ)/*
+	$(CXX) -shared -Wl,-soname,libre2-java.so -o $(OBJ)/libre2-java.so $(OBJ)/RE2.o -Lre2/obj/so -lre2 -lpthread
+	strip $(OBJ)/*
 
 class: build-class
 
 build-class: target/libre2-java-1.0-SNAPSHOT.jar
 
 target/libre2-java-1.0-SNAPSHOT.jar: add-so
-        $(MVN) package -Dmaven.test.skip=true
+	$(MVN) package -Dmaven.test.skip=true
 
 add-so: .re2.compile.stamp $(OBJ)/libre2-java.so
-        mkdir -p $(NATIVES-TARGET)
-        cp $(OBJ)/libre2-java.so re2/obj/so/libre2.so $(NATIVES-TARGET)
+	mkdir -p $(NATIVES-TARGET)
+	cp $(OBJ)/libre2-java.so re2/obj/so/libre2.so $(NATIVES-TARGET)
 
 lib: add-so
 
@@ -47,3 +47,4 @@ clean:
 
 install:
 	mvn install:install-file -Dfile=target/libre2-java-1.2.5.jar
+
