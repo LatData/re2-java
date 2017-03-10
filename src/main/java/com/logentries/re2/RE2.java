@@ -195,7 +195,7 @@ public final class RE2 extends LibraryLoader implements AutoCloseable {
             if (captureGroups.get(i).start > -1) {
                 namedGroups.add(new NamedGroup(names.get(i), captureGroups.get(i)));
             } else {
-                namedGroups.add(new NamedGroups(names.get(i), new CaptureGroup("", 0, 0) ));
+                namedGroups.add(new NamedGroup(names.get(i), new CaptureGroup("", 0, 0) ));
             }
         }
         return namedGroups;
